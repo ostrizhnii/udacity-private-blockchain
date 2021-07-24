@@ -43,6 +43,7 @@ class ApplicationServer {
 
 	initControllers() {
         require("./BlockchainController.js")(this.app, this.blockchain);
+        require("./ChainController.js")(this.app, this.blockchain);
 	}
 
 	start() {
