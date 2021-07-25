@@ -63,6 +63,7 @@ class Blockchain {
      */
     _addBlock(block) {
         let self = this;
+
         return new Promise(async (resolve, reject) => {
             if (self.height !== -1) {
                 block.previousBlockHash = self.chain[self.height].hash
@@ -117,6 +118,7 @@ class Blockchain {
      */
     submitStar(address, message, signature, star) {
         const self = this;
+
         return new Promise(async (resolve, reject) => {
             const messageTime = parseInt(message.split(':')[1]);
             const currentTime = parseInt(new Date().getTime().toString().slice(0, -3));
@@ -143,8 +145,10 @@ class Blockchain {
      * @param {*} hash 
      */
     getBlockByHash(hash) {
+        const self = this;
+
         return new Promise((resolve, reject) => {
-           const block = this.chain.find(block => block.hash === hash);
+           const block = self.chain.find(block => block.hash === hash);
 
            resolve(block ? block : null);
         });
@@ -174,9 +178,11 @@ class Blockchain {
      * @param {*} address 
      */
     getStarsByWalletAddress (address) {
+        const self = this;
+
         return new Promise(async (resolve, reject) => {
             const stars = [];
-            const allStars = await Promise.all(this.chain.map(block => block.getBData()))
+            const allStars = await Promise.all(self.chain.map(block => block.getBData()))
 
             for (const star of allStars) {
                 if (!star) {
@@ -201,15 +207,17 @@ class Blockchain {
      * 2. Each Block should check the with the previousBlockHash
      */
     validateChain() {
+        const self = this;
+
         return new Promise(async (resolve, reject) => {
             const errorLog = [];
 
-            if (this.height === -1) {
+            if (self.height === -1) {
                 return resolve(errorLog);
             }
 
-            for (const block of this.chain) {
-                const blockErrors = await this._validateBlock(block);
+            for (const block of self.chain) {
+                const blockErrors = await self._validateBlock(block);
 
                 if (blockErrors.length) {
                     errorLog.push(...blockErrors);

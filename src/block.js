@@ -36,11 +36,13 @@ class Block {
      *  Note: to access the class values inside a Promise code you need to create an auxiliary value `let self = this;`
      */
     validate() {
+        const self = this;
+
         return new Promise((resolve, reject) => {
             const validHash = this.hash;
-            this.hash = null;
+            self.hash = null;
             const calculatedHash = SHA256(JSON.stringify(this)).toString();
-            this.hash = validHash;
+            self.hash = validHash;
 
             resolve(calculatedHash === validHash);
         });
@@ -56,12 +58,14 @@ class Block {
      *     or Reject with an error.
      */
     getBData() {
+        const self = this;
+
         return new Promise((resolve, reject) => {
-            if (this.isGenesisBlock()) {
+            if (self.isGenesisBlock()) {
                 return resolve(null);
             }
 
-            resolve(JSON.parse(hex2ascii(this.body)));
+            resolve(JSON.parse(hex2ascii(self.body)));
         })
     }
 
